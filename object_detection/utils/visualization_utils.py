@@ -31,7 +31,6 @@ import PIL.ImageDraw as ImageDraw
 import PIL.ImageFont as ImageFont
 import six
 import tensorflow as tf
-
 from object_detection.core import standard_fields as fields
 
 
@@ -200,6 +199,7 @@ def draw_bounding_box_on_image(image,
         fill='black',
         font=font)
     text_bottom -= text_height - 2 * margin
+    #draw.text((left + margin, text_bottom - text_height - margin), "("+str(left)+", "+str(right)+")", font=font, fill='black')
 
 
 def draw_bounding_boxes_on_image_array(image,
@@ -524,7 +524,7 @@ def draw_mask_on_image_array(image, mask, color='red', alpha=0.4):
   pil_image = Image.composite(pil_solid_color, pil_image, pil_mask)
   np.copyto(image, np.array(pil_image.convert('RGB')))
 
-
+# This is where we add our code
 def visualize_boxes_and_labels_on_image_array(
     image,
     boxes,
@@ -639,6 +639,7 @@ def visualize_boxes_and_labels_on_image_array(
           color='red',
           alpha=1.0
       )
+    
     draw_bounding_box_on_image_array(
         image,
         ymin,
@@ -649,6 +650,7 @@ def visualize_boxes_and_labels_on_image_array(
         thickness=line_thickness,
         display_str_list=box_to_display_str_map[box],
         use_normalized_coordinates=use_normalized_coordinates)
+
     if keypoints is not None:
       draw_keypoints_on_image_array(
           image,
