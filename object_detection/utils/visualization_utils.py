@@ -33,6 +33,33 @@ import six
 import tensorflow as tf
 from object_detection.core import standard_fields as fields
 
+from .rplidar import RPLidar
+import time
+PORT_NAME = 'COM3'
+
+class wrapper(object):
+
+    def __init__(self, generator):
+      time.sleep(1)
+      self.__gen = generator()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        self.current = next(self.__gen)
+        return self.current
+
+    def __call__(self):
+        return self
+
+@wrapper
+def gen():
+    lidar = RPLidar(PORT_NAME)
+    for i in lidar.iter_measurments():
+        yield i
+
+a_lidar = gen()
 
 _TITLE_LEFT_MARGIN = 10
 _TITLE_TOP_MARGIN = 10
@@ -199,7 +226,11 @@ def draw_bounding_box_on_image(image,
         fill='black',
         font=font)
     text_bottom -= text_height - 2 * margin
-    #draw.text((left + margin, text_bottom - text_height - margin), "("+str(left)+", "+str(right)+")", font=font, fill='black')
+    if (next(a_lidar)[0] == True):
+      print(a_lidar.current[3])
+      draw.text((left + margin, text_bottom - text_height - margin), "("+str(a_lidar.current[3])+")", font=font, fill='black')
+      
+
 
 
 def draw_bounding_boxes_on_image_array(image,
