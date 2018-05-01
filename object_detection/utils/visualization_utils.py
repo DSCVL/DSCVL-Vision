@@ -226,9 +226,8 @@ def draw_bounding_box_on_image(image,
         fill='black',
         font=font)
     text_bottom -= text_height - 2 * margin
-    if (next(a_lidar)[0] == True):
-      print(a_lidar.current[3])
-      draw.text((left + margin, text_bottom - text_height - margin), "("+str(a_lidar.current[3])+")", font=font, fill='black')
+    #print(a_lidar.current[3])
+    draw.text((left + margin, text_bottom - text_height - margin), "("+str(next(a_lidar))+")", font=font, fill='black')
       
 
 
