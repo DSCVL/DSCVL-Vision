@@ -125,8 +125,7 @@ while lidar == '':
 
 with detection_graph.as_default():
   with tf.Session(graph=detection_graph) as sess:
-    for a in AsynchronousGenerator(function=gen(), maxsize=0):
-      lidar_read = a
+    for lidar_read in AsynchronousGenerator(function=gen(), maxsize=0):
       ret, image_np = cap.read()
       # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
       image_np_expanded = np.expand_dims(image_np, axis=0)
@@ -155,7 +154,7 @@ with detection_graph.as_default():
           lidar_m = lidar_read)
       
       # Display webcam output
-      cv2.imshow('Object Detection', cv2.resize(image_np, (800,600)))
+      cv2.imshow('Object Detection', cv2.resize(image_np, (1920,1080)))
 
       if cv2.waitKey(25) & 0xFF == ord('q'):
         cv2.destroyAllWindows()
