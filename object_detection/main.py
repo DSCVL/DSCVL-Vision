@@ -27,6 +27,8 @@ from utils import label_map_util
 
 from utils import visualization_utils as vis_util
 
+# Rplidar
+from rplidar import RPLidar
 
 # # Model preparation 
 
@@ -113,11 +115,34 @@ TEST_IMAGE_PATHS = [ os.path.join(PATH_TO_TEST_IMAGES_DIR, 'image{}.jpg'.format(
 IMAGE_SIZE = (12, 8)
 
 
-# In[10]:
+PORT_NAME = 'COM15'
 
+class wrapper(object):
+
+    def __init__(self, generator):
+      self.__gen = generator()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        self.current = next(self.__gen)
+        return self.current
+
+    def __call__(self):
+        return self
+
+@wrapper
+def gen():
+    lidar = RPLidar(PORT_NAME)
+    for i in lidar.iter_measurments():
+        yield i
+
+lidar = gen()
 with detection_graph.as_default():
   with tf.Session(graph=detection_graph) as sess:
     while True:
+      lidar_read = list(next(lidar))
       ret, image_np = cap.read()
       # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
       image_np_expanded = np.expand_dims(image_np, axis=0)
@@ -142,7 +167,8 @@ with detection_graph.as_default():
           category_index,
           use_normalized_coordinates=True,
           skip_scores=True,
-          line_thickness=8)
+          line_thickness=8,
+          lidar_m = lidar_read)
       
       # Display webcam output
       cv2.imshow('Object Detection', cv2.resize(image_np, (800,600)))

@@ -33,33 +33,6 @@ import six
 import tensorflow as tf
 from object_detection.core import standard_fields as fields
 
-from .rplidar import RPLidar
-import time
-PORT_NAME = 'COM3'
-
-class wrapper(object):
-
-    def __init__(self, generator):
-      time.sleep(1)
-      self.__gen = generator()
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        self.current = next(self.__gen)
-        return self.current
-
-    def __call__(self):
-        return self
-
-@wrapper
-def gen():
-    lidar = RPLidar(PORT_NAME)
-    for i in lidar.iter_measurments():
-        yield i
-
-a_lidar = gen()
 
 _TITLE_LEFT_MARGIN = 10
 _TITLE_TOP_MARGIN = 10
@@ -127,7 +100,8 @@ def draw_bounding_box_on_image_array(image,
                                      color='red',
                                      thickness=4,
                                      display_str_list=(),
-                                     use_normalized_coordinates=True):
+                                     use_normalized_coordinates=True,
+                                     lidar_m = []):
   """Adds a bounding box to an image (numpy array).
 
   Bounding box coordinates can be specified in either absolute (pixel) or
@@ -150,7 +124,8 @@ def draw_bounding_box_on_image_array(image,
   image_pil = Image.fromarray(np.uint8(image)).convert('RGB')
   draw_bounding_box_on_image(image_pil, ymin, xmin, ymax, xmax, color,
                              thickness, display_str_list,
-                             use_normalized_coordinates)
+                             use_normalized_coordinates,
+                             lidar_m = lidar_m)
   np.copyto(image, np.array(image_pil))
 
 
@@ -162,7 +137,8 @@ def draw_bounding_box_on_image(image,
                                color='red',
                                thickness=4,
                                display_str_list=(),
-                               use_normalized_coordinates=True):
+                               use_normalized_coordinates=True,
+                               lidar_m = []):
   """Adds a bounding box to an image.
 
   Bounding box coordinates can be specified in either absolute (pixel) or
@@ -227,7 +203,7 @@ def draw_bounding_box_on_image(image,
         font=font)
     text_bottom -= text_height - 2 * margin
     #print(a_lidar.current[3])
-    draw.text((left + margin, text_bottom - text_height - margin), "("+str(next(a_lidar))+")", font=font, fill='black')
+    draw.text((left + margin, text_bottom - text_height - margin), "("+str(lidar_m)+")", font=font, fill='black')
       
 
 
@@ -571,7 +547,8 @@ def visualize_boxes_and_labels_on_image_array(
     line_thickness=4,
     groundtruth_box_visualization_color='black',
     skip_scores=False,
-    skip_labels=False):
+    skip_labels=False,
+    lidar_m = []):
   """Overlay labeled boxes on an image with formatted scores and label names.
 
   This function groups boxes that correspond to the same location
@@ -679,7 +656,8 @@ def visualize_boxes_and_labels_on_image_array(
         color=color,
         thickness=line_thickness,
         display_str_list=box_to_display_str_map[box],
-        use_normalized_coordinates=use_normalized_coordinates)
+        use_normalized_coordinates=use_normalized_coordinates,
+        lidar_m = lidar_m)
 
     if keypoints is not None:
       draw_keypoints_on_image_array(
