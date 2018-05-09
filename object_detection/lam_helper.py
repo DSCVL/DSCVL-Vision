@@ -66,5 +66,4 @@ PORT_NAME = 'COM15'
 @wrapper
 def gen():
     lidar = RPLidar(PORT_NAME)
-    for i in lidar.iter_measurments():
-        yield i
+    return lidar.iter_scans()

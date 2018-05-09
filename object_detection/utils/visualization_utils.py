@@ -202,11 +202,15 @@ def draw_bounding_box_on_image(image,
         fill='black',
         font=font)
     text_bottom -= text_height - 2 * margin
-    #print(a_lidar.current[3])
-    draw.text((left + margin, text_bottom - text_height - margin), "("+str(lidar_m)+")", font=font, fill='black')
-      
 
-
+    dn_x_min = xmin * im_width  # Calculate the left and right x bounds
+    dn_x_max = xmax * im_width
+    dist = "NN"
+    for read in lidar_m:
+      if (read[0] >= dn_x_min) and (read[0] <= dn_x_max):
+        dist = read[1]
+        break
+    draw.text((left + margin, text_bottom - text_height - margin), "("+str(dist)+")", font=font, fill='green')
 
 def draw_bounding_boxes_on_image_array(image,
                                        boxes,
