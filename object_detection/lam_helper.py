@@ -56,7 +56,13 @@ class wrapper(object):
         return self
 
     def __next__(self):
-        self.current = next(self.__gen)
+        self.current = None
+        while self.current == None:
+            try:
+                self.current = next(self.__gen)
+            except:
+                print("Lidar init failed. Please restart. (Common issue)")
+                quit()
         return self.current
 
     def __call__(self):
