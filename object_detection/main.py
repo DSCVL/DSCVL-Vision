@@ -95,7 +95,7 @@ cap.set(4,VIDEO_HEIGHT)
 with detection_graph.as_default():
   with tf.Session(graph=detection_graph) as sess:
     for lidar_read in AsynchronousGenerator(function=gen(), maxsize=0):
-        
+        skip = False
         readings = []
         for read in lidar_read:
             theta = read[1]
@@ -103,9 +103,15 @@ with detection_graph.as_default():
             if (theta >= 0) and (theta <= 90):
                 x_c = math.sin(math.radians(theta)) * (VIDEO_WIDTH / 2)
             elif (theta >= 270) and (theta <= 360):
-                x_c = math.sin(math.radians(360 - theta)) * (VIDEO_WIDTH / 2)
+                x_c = (VIDEO_WIDTH / 2) + math.sin(math.radians(360 - theta)) * (VIDEO_WIDTH / 2)
+            else:
+                skip = True
+                continue
             readings.append( (x_c, distance) ) # Append x coordinate and distance
             break
+
+        if skip == True:
+            continue
 
         ret, image_np = cap.read()
         # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
@@ -131,7 +137,7 @@ with detection_graph.as_default():
             category_index,
             use_normalized_coordinates=True,
             skip_scores=True,
-            line_thickness=8,
+            line_thickness=4,
             lidar_m = readings)
 
         # Display webcam output
