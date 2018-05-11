@@ -24,8 +24,12 @@ from lam_helper import * # My code
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-VIDEO_WIDTH = 1920
-VIDEO_HEIGHT = 1080
+VIDEO_WIDTH = 1290
+VIDEO_HEIGHT = 720
+DMAX = 4000
+IMIN = 0
+IMAX = 100
+
 
 # # Model preparation 
 
@@ -92,6 +96,13 @@ cap = cv2.VideoCapture(0)   # Start camera
 cap.set(3,VIDEO_WIDTH)      # Set Resolution
 cap.set(4,VIDEO_HEIGHT)
 
+print("\tStarting polar plot")
+ax = plt.subplot(111, projection='polar')
+c = ax.scatter([0, 0], [0, 0], s=5, c=[IMIN, IMAX], cmap=plt.cm.Greys_r, lw=0)
+ax.set_rmax(DMAX)
+ax.grid(True)
+
+
 with detection_graph.as_default():
   with tf.Session(graph=detection_graph) as sess:
     for lidar_read in AsynchronousGenerator(function=gen(), maxsize=0):
@@ -100,6 +111,11 @@ with detection_graph.as_default():
         for read in lidar_read:
             theta = read[1]
             distance = read[2]
+
+            ax.scatter(math.radians(theta), distance) # Plot
+            plt.pause(0.0000001)
+            plt.cla()
+
             if (theta >= 0) and (theta <= 90):
                 x_c = math.sin(math.radians(theta)) * (VIDEO_WIDTH / 2)
             elif (theta >= 270) and (theta <= 360):
@@ -129,6 +145,7 @@ with detection_graph.as_default():
             [boxes, scores, classes, num_detections],
             feed_dict={image_tensor: image_np_expanded})
         # Visualization of the results of a detection.
+
         vis_util.visualize_boxes_and_labels_on_image_array(
             image_np,
             np.squeeze(boxes),
@@ -146,3 +163,4 @@ with detection_graph.as_default():
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break
+    plt.show()
