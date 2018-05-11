@@ -205,7 +205,7 @@ def draw_bounding_box_on_image(image,
 
     dn_x_min = xmin * im_width  # Calculate the left and right x bounds
     dn_x_max = xmax * im_width
-    dist = "NN"
+    dist = "null"
     for read in lidar_m:
       if (read[0] >= dn_x_min) and (read[0] <= dn_x_max):
         dist = read[1]
