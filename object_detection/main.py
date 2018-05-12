@@ -23,6 +23,8 @@ from lam_helper import * # My code
 
 import matplotlib.pyplot as plt
 
+
+
 VIDEO_WIDTH = 1290
 VIDEO_HEIGHT = 720
 DMAX = 3000         # Max distance (meters)
@@ -97,14 +99,13 @@ cap.set(4,VIDEO_HEIGHT)
 
 print("\tStarting polar plot")
 ax = plt.subplot(111, projection='polar')
-#c = ax.scatter([0, 0], [0, 0], s=5, c=[IMIN, IMAX], cmap=plt.cm.Greys_r, lw=0)
 ax.set_rmax(DMAX)
 ax.grid(True)
 ax.set_theta_zero_location('N')  # Set zero to North
 
 with detection_graph.as_default():
   with tf.Session(graph=detection_graph) as sess:
-    for lidar_read in AsynchronousGenerator(function=gen(), maxsize=0):
+    for lidar_read in AsynchronousGenerator(function=gen(), maxsize=1):
         skip = False
         readings = []
         for read in lidar_read:

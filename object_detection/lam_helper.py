@@ -61,7 +61,7 @@ class wrapper(object):
             try:
                 self.current = next(self.__gen)
             except:
-                print("Lidar init failed. Please restart. (Common issue)")
+                print("ERROR: Lidar init failed. Please restart.")
                 quit()
         return self.current
 
