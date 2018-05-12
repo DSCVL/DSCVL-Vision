@@ -112,9 +112,9 @@ with detection_graph.as_default():
             theta = read[1]
             distance = read[2]
             if (theta >= 0) and (theta <= 80):
-                x_c = math.sin(math.radians(theta)) * (VIDEO_WIDTH / 2)
+                x_c = (VIDEO_WIDTH / 2) + math.sin(math.radians(theta)) * (VIDEO_WIDTH / 2)
             elif (theta >= 280):
-                x_c = (VIDEO_WIDTH / 2) + math.sin(math.radians(360 - theta)) * (VIDEO_WIDTH / 2)
+                x_c = math.sin(math.radians(360 - theta)) * (VIDEO_WIDTH / 2)
             else:
                 continue
             readings.append( (x_c, distance) ) # Append x coordinate and distance
@@ -124,6 +124,7 @@ with detection_graph.as_default():
         plt.cla()
 
         ret, image_np = cap.read()
+
         # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
         image_np_expanded = np.expand_dims(image_np, axis=0)
         image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
