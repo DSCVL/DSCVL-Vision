@@ -22,11 +22,10 @@ from utils import visualization_utils as vis_util
 from lam_helper import * # My code
 
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
 
 VIDEO_WIDTH = 1290
 VIDEO_HEIGHT = 720
-DMAX = 4000
+DMAX = 3000         # Max distance (meters)
 IMIN = 0
 IMAX = 100
 
@@ -98,10 +97,10 @@ cap.set(4,VIDEO_HEIGHT)
 
 print("\tStarting polar plot")
 ax = plt.subplot(111, projection='polar')
-c = ax.scatter([0, 0], [0, 0], s=5, c=[IMIN, IMAX], cmap=plt.cm.Greys_r, lw=0)
+#c = ax.scatter([0, 0], [0, 0], s=5, c=[IMIN, IMAX], cmap=plt.cm.Greys_r, lw=0)
 ax.set_rmax(DMAX)
 ax.grid(True)
-
+ax.set_theta_zero_location('N')  # Set zero to North
 
 with detection_graph.as_default():
   with tf.Session(graph=detection_graph) as sess:
@@ -111,15 +110,18 @@ with detection_graph.as_default():
         for read in lidar_read:
             theta = read[1]
             distance = read[2]
-            if (theta >= 0) and (theta <= 80):
+            if (theta >= 0) and (theta <= 45):
                 x_c = (VIDEO_WIDTH / 2) + math.sin(math.radians(theta)) * (VIDEO_WIDTH / 2)
-            elif (theta >= 280):
+            elif (theta >= 315):
                 x_c = math.sin(math.radians(360 - theta)) * (VIDEO_WIDTH / 2)
             else:
                 continue
             readings.append( (x_c, distance) ) # Append x coordinate and distance
             ax.scatter(math.radians(theta), distance) # Plot
-            
+            ax.set_rmax(DMAX)
+            ax.grid(True)
+            ax.set_theta_zero_location('N')  # Set zero to North
+
         plt.pause(0.0000001)
         plt.cla()
 

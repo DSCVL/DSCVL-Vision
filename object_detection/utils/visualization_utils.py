@@ -189,7 +189,22 @@ def draw_bounding_box_on_image(image,
   else:
     text_bottom = bottom + total_display_str_height
   # Reverse list and print from bottom to top.
+
+  dn_x_min = xmin * im_width  # Calculate the left and right x bounds
+  dn_x_max = xmax * im_width
+  dist = "null"
   for display_str in display_str_list[::-1]:
+    
+    for read in lidar_m:
+      if (read[0] >= dn_x_min) and (read[0] <= dn_x_max):
+        dist = read[1] / 1000
+        break
+    
+    if dist != "null":
+      display_str = display_str + "  |  " + str(dist) + " meters"
+    else:
+      display_str
+
     text_width, text_height = font.getsize(display_str)
     margin = np.ceil(0.05 * text_height)
     draw.rectangle(
@@ -203,14 +218,9 @@ def draw_bounding_box_on_image(image,
         font=font)
     text_bottom -= text_height - 2 * margin
 
-    dn_x_min = xmin * im_width  # Calculate the left and right x bounds
-    dn_x_max = xmax * im_width
-    dist = "null"
-    for read in lidar_m:
-      if (read[0] >= dn_x_min) and (read[0] <= dn_x_max):
-        dist = read[1]
-        break
-    draw.text((left + margin, text_bottom - text_height - margin), "("+str(dist)+")", font=font, fill='green')
+
+
+    #draw.text((left + margin, text_bottom - text_height - margin), "("+str(dist)+")", font=font, fill='green')
 
 def draw_bounding_boxes_on_image_array(image,
                                        boxes,
