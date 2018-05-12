@@ -101,7 +101,6 @@ print("\tStarting polar plot")
 ax = plt.subplot(111, projection='polar')
 ax.set_rmax(DMAX)
 ax.grid(True)
-ax.set_theta_zero_location('N')  # Set zero to North
 
 with detection_graph.as_default():
   with tf.Session(graph=detection_graph) as sess:
@@ -111,9 +110,9 @@ with detection_graph.as_default():
         for read in lidar_read:
             theta = read[1]
             distance = read[2]
-            if (theta >= 0) and (theta <= 45):
+            if (theta >= 0) and (theta <= 55):
                 x_c = (VIDEO_WIDTH / 2) + math.sin(math.radians(theta)) * (VIDEO_WIDTH / 2)
-            elif (theta >= 315):
+            elif (theta >= 305):
                 x_c = math.sin(math.radians(360 - theta)) * (VIDEO_WIDTH / 2)
             else:
                 continue
@@ -121,7 +120,6 @@ with detection_graph.as_default():
             ax.scatter(math.radians(theta), distance) # Plot
             ax.set_rmax(DMAX)
             ax.grid(True)
-            ax.set_theta_zero_location('N')  # Set zero to North
 
         plt.pause(0.0000001)
         plt.cla()
