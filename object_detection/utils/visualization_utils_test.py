@@ -13,12 +13,7 @@
 # limitations under the License.
 # ==============================================================================
 
-"""Tests for image.understanding.object_detection.core.visualization_utils.
-
-Testing with visualization in the following colab:
-https://drive.google.com/a/google.com/file/d/0B5HnKS_hMsNARERpU3MtU3I5RFE/view?usp=sharing
-
-"""
+"""Tests for object_detection.utils.visualization_utils."""
 import logging
 import os
 
@@ -191,6 +186,15 @@ class VisualizationUtilsTest(tf.test.TestCase):
     cdf_image_summary = tf.get_collection(key=tf.GraphKeys.SUMMARIES)[0]
     with self.test_session():
       cdf_image_summary.eval()
+
+  def test_add_hist_image_summary(self):
+    values = [0.1, 0.2, 0.3, 0.4, 0.42, 0.44, 0.46, 0.48, 0.50]
+    bins = [0.01 * i for i in range(101)]
+    visualization_utils.add_hist_image_summary(values, bins,
+                                               'ScoresDistribution')
+    hist_image_summary = tf.get_collection(key=tf.GraphKeys.SUMMARIES)[0]
+    with self.test_session():
+      hist_image_summary.eval()
 
 
 if __name__ == '__main__':
