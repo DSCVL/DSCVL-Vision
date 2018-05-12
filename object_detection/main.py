@@ -111,23 +111,17 @@ with detection_graph.as_default():
         for read in lidar_read:
             theta = read[1]
             distance = read[2]
-
-            ax.scatter(math.radians(theta), distance) # Plot
-            plt.pause(0.0000001)
-            plt.cla()
-
             if (theta >= 0) and (theta <= 90):
                 x_c = math.sin(math.radians(theta)) * (VIDEO_WIDTH / 2)
             elif (theta >= 270) and (theta <= 360):
                 x_c = (VIDEO_WIDTH / 2) + math.sin(math.radians(360 - theta)) * (VIDEO_WIDTH / 2)
             else:
-                skip = True
                 continue
             readings.append( (x_c, distance) ) # Append x coordinate and distance
-            break
-
-        if skip == True:
-            continue
+            ax.scatter(math.radians(theta), distance) # Plot
+            
+        plt.pause(0.0000001)
+        plt.cla()
 
         ret, image_np = cap.read()
         # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
