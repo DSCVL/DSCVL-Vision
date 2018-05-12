@@ -22,7 +22,7 @@ class AsynchronousGenerator:
         ...     really_slow_iostream.write(chunk)
     source: https://www.reddit.com/r/Python/comments/ew9is/buffered_asynchronous_generators_for_parallel/
     """
-    def __init__(self, function, args=(), kwargs={}, start=True, maxsize=0):
+    def __init__(self, function, args=(), kwargs={}, start=True, maxsize=1):
         self.generator = iter(function(*args, **kwargs))
         self.thread = threading.Thread(target=self._generatorcall)
         self.q = Queue.Queue(maxsize=maxsize)
