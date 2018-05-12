@@ -111,9 +111,9 @@ with detection_graph.as_default():
         for read in lidar_read:
             theta = read[1]
             distance = read[2]
-            if (theta >= 0) and (theta <= 90):
+            if (theta >= 0) and (theta <= 80):
                 x_c = math.sin(math.radians(theta)) * (VIDEO_WIDTH / 2)
-            elif (theta >= 270) and (theta <= 360):
+            elif (theta >= 280):
                 x_c = (VIDEO_WIDTH / 2) + math.sin(math.radians(360 - theta)) * (VIDEO_WIDTH / 2)
             else:
                 continue
