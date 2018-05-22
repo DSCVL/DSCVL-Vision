@@ -19,7 +19,7 @@ Tested, developed, and executed on Windows 10, build 1803
 7. CP210x USB to UART Bridge VCP Driver (If on Windows 10, build 1803, please see below)
 	- https://goo.gl/oiywRV
 
-## If using Tensorflow-gpu
+### Tensorflow-gpu
 3. Nvidia CUDA Toolkit 9.0.176 
 4. Nvidia CUDnn v7.0.4 for CUDA 9.0
 
