@@ -1,3 +1,5 @@
+Video demonstration: https://www.youtube.com/watch?v=6v8h8LPFRls&feature=youtu.be
+
 # Description
 Tensorflow model adapted for DSCVL. 
 
