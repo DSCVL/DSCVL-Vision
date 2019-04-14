@@ -19,7 +19,7 @@ Tested, developed, and executed on Windows 10, build 1803
 6. OpenCV 3.4.0.12
 	- `pip3 install opencv-python==3.4.0.12`
 7. CP210x USB to UART Bridge VCP Driver (If on Windows 10, build 1803, please see below)
-	- https://goo.gl/oiywRV
+	- https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers
 
 ### Tensorflow-gpu
 3. Nvidia CUDA Toolkit 9.0.176 
@@ -28,9 +28,9 @@ Tested, developed, and executed on Windows 10, build 1803
 ## Windows 10, build 1803 Driver Fix
 The CP210x USB to UART Bridge VCP Driver, required for RPlidar A1, does not meet Windows driver INF requirements and will not install.
 
-Read more here: https://goo.gl/5erDwL
+[Read more](https://web.archive.org/web/20190414053931/https://www.silabs.com/community/interface/forum/_jcr_content/content/primary/qna.social.0.30)
 
-Instructions to enable unsigned driver installation - https://goo.gl/EzrGUx
+[Instructions to enable unsigned driver installation](https://web.archive.org/web/20161214162911/https://www.maketecheasier.com/install-unsigned-drivers-windows10/)
 
 My modified driver download
 	- https://drive.google.com/file/d/1jKxpAml_JoFPP2b4fXIjJWZ2_udghgj9/view?usp=sharing
